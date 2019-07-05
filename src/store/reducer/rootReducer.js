@@ -31,12 +31,7 @@ const defaultState = {
             "price": 20
         }
     ],
-    'cart_item': [
-        {
-            "id": "shop01",
-            "qty": 1,
-        }
-    ]
+    'cart_item': []
 }
 
 const rootReducer = (state = defaultState, action) => {
@@ -44,12 +39,14 @@ const rootReducer = (state = defaultState, action) => {
         case 'ADD_TO_CART':
             let alreadyExist = state.cart_item.find(item => item.id === action.id)
             const cart_item = alreadyExist ? state.cart_item : [...state.cart_item, { 'id': action.id, 'qty': 1 }];
+            localStorage.setItem('cart_item', JSON.stringify(cart_item));
             return {
                 ...state,
                 cart_item: cart_item
             };
         case 'REMOVE_ITEM_CART':
             const filterItem = state.cart_item.filter(item => item.id !== action.id);
+            localStorage.setItem('cart_item', JSON.stringify(filterItem));
             return {
                 ...state,
                 cart_item: filterItem
@@ -58,6 +55,7 @@ const rootReducer = (state = defaultState, action) => {
             const increaseQtyItem = state.cart_item.map(item => {
                 return item.id === action.id ? { 'id': item.id, 'qty': item.qty + 1 } : item
             });
+            localStorage.setItem('cart_item', JSON.stringify(increaseQtyItem));
             return {
                 ...state,
                 cart_item: increaseQtyItem
@@ -66,14 +64,22 @@ const rootReducer = (state = defaultState, action) => {
             const decreaseQtyItem = state.cart_item.map(item => {
                 return item.id === action.id && item.qty > 1 ? { 'id': item.id, 'qty': item.qty - 1 } : item
             });
+            localStorage.setItem('cart_item', JSON.stringify(decreaseQtyItem));
             return {
                 ...state,
                 cart_item: decreaseQtyItem
             };
         case 'CLEAR_CART':
+            localStorage.removeItem('cart_item');
             return {
                 ...state,
                 cart_item: []
+            }
+        case 'LOCAL_STORAGE_TO_CART':
+            let local_cart_item = localStorage.getItem('cart_item') ? JSON.parse(localStorage.getItem('cart_item')) : [];
+            return {
+                ...state,
+                cart_item: local_cart_item
             }
         default:
             return state;

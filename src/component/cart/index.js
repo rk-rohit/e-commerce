@@ -20,6 +20,10 @@ class Cart extends Component {
         this.props.decrQtyCart(id);
     }
 
+    componentDidMount() {
+        this.props.localStorageToCartItem();
+    }
+
     getCartItem = () => {
         let { cart_item, product } = this.props;
         let cart_list = cart_item.length ? cart_item.map(item => {
@@ -81,7 +85,8 @@ const mapDispatchToProps = (dispatch) => {
     return {
         removeItemCart: (id) => dispatch({ type: 'REMOVE_ITEM_CART', id }),
         incrQtyCart: (id) => dispatch({ type: 'INCREASE_QTY_CART', id }),
-        decrQtyCart: (id) => dispatch({ type: 'DECREASE_QTY_CART', id })
+        decrQtyCart: (id) => dispatch({ type: 'DECREASE_QTY_CART', id }),
+        localStorageToCartItem: ()=> dispatch({type: 'LOCAL_STORAGE_TO_CART'})
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Cart);

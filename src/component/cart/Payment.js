@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 class Payment extends Component {
@@ -31,6 +30,7 @@ class Payment extends Component {
                 this.email.value = '';
                 this.mobile.value = '';
                 this.props.clearCart();
+                localStorage.removeItem('cart_item');
             }
         }
     }
